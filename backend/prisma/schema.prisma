@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  walletAddress String    @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  creditScores  CreditScore[]
+  loans         Loan[]
+  transactions  Transaction[]
+  agentAuths    AgentAuthorization[]
+  
+  @@map("users")
+}
+
+model CreditScore {
+  id              String   @id @default(uuid())
+  userId          String
+  score           Int
+  tier            String
+  history         Json     // Array of { score: number, timestamp: Date }
+  factors         Json     // Payment history, volume, etc.
+  lastUpdated     DateTime @default(now())
+  
+  user            User     @relation(fields: [userId], references: [id])
+  
+  @@map("credit_scores")
+}
+
+model Loan {
+  id              String   @id @default(uuid())
+  userId          String
+  loanId          Int      // On-chain loan ID
+  amount          Decimal  @db.Decimal(20, 8)
+  interestRate    Decimal  @db.Decimal(5, 2)
+  collateral      Decimal  @db.Decimal(20, 8)
+  duration        Int      // In blocks
+  status          String   // pending, active, repaid, defaulted, cancelled
+  lender          String?
+  startBlock      Int?
+  repaidAmount    Decimal  @db.Decimal(20, 8) @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  user            User     @relation(fields: [userId], references: [id])
+  
+  @@map("loans")
+}
+
+model Transaction {
+  id              String   @id @default(uuid())
+  userId          String
+  txId            String   // On-chain transaction ID
+  txType          String
+  amount          Decimal  @db.Decimal(20, 8)
+  protocol        String
+  counterparty    String?
+  metadata        Json?
+  blockHeight     Int
+  timestamp       DateTime
+  
+  user            User     @relation(fields: [userId], references: [id])
+  
+  @@map("transactions")
+}
+
+model Agent {
+  id              String   @id @default(uuid())
+  agentId         String   @unique // Principal address
+  name            String
+  description     String
+  capabilities    String[]
+  endpoint        String
+  reputation      Int      @default(500)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  authorizations  AgentAuthorization[]
+  performance     AgentPerformance?
+  
+  @@map("agents")
+}
+
+model AgentAuthorization {
+  id          String    @id @default(uuid())
+  agentId     String
+  userId      String
+  authorized  Boolean   @default(false)
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  
+  agent       Agent     @relation(fields: [agentId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
+  
+  @@unique([agentId, userId])
+  @@map("agent_authorizations")
+}
+
+model AgentPerformance {
+  id                String   @id @default(uuid())
+  agentId           String   @unique
+  totalTasks        Int      @default(0)
+  successfulTasks   Int      @default(0)
+  failedTasks       Int      @default(0)
+  ratingSum         Int      @default(0)
+  ratingCount       Int      @default(0)
+  
+  agent             Agent    @relation(fields: [agentId], references: [id])
+  
+  @@map("agent_performance")
+}
+
+model BlockchainEvent {
+  id            String   @id @default(uuid())
+  txId          String
+  contractId    String
+  eventType     String
+  payload       Json
+  blockHeight   Int
+  processed     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  
+  @@map("blockchain_events")
+}

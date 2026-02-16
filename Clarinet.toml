@@ -1,0 +1,66 @@
+[project]
+name = "defi-credit-score"
+description = "DeFi Credit Score System for Latin America"
+authors = ["codingsh"]
+telemetry = false
+requirements = []
+
+[contracts]
+credit-score = { path = "contracts/src/credit-score.clar" }
+loan-manager = { path = "contracts/src/loan-manager.clar" }
+agent-registry = { path = "contracts/src/agent-registry.clar" }
+transaction-history = { path = "contracts/src/transaction-history.clar" }
+
+[repl.analysis]
+passes = ["check_checker"]
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false
+
+[network]
+name = "testnet"
+node_rpc_address = "https://api.testnet.hiro.so"
+deployment_fee_rate = 10
+
+[[network.devnet]]
+name = "devnet"
+node_rpc_address = "http://localhost:20443"
+bitcoin_node_rpc_address = "http://localhost:18443"
+stacks_node_rpc_address = "http://localhost:20443"
+stacks_api_address = "http://localhost:3999"
+bitcoin_explorer_url = "http://localhost:8001"
+stacks_explorer_url = "http://localhost:8000"
+bitcoin_controller_port = 18444
+stacks_controller_port = 20446
+postgres_port = 5432
+postgres_username = "postgres"
+postgres_password = "postgres"
+postgres_database = "postgres"
+bind_address = "0.0.0.0"
+use_docker_gateway = true
+enable_next_feature = true
+enable_subnet_node = false
+evm_node = false
+
+[[network.testnet]]
+name = "testnet"
+node_rpc_address = "https://api.testnet.hiro.so"
+bitcoin_node_rpc_address = "http://testnet.stacks.co:20443"
+stacks_node_rpc_address = "https://api.testnet.hiro.so"
+stacks_api_address = "https://api.testnet.hiro.so"
+bitcoin_explorer_url = "https://mempool.space/testnet"
+stacks_explorer_url = "https://explorer.hiro.so/?chain=testnet"
+bitcoin_controller_port = 18444
+stacks_controller_port = 20446
+
+[[network.mainnet]]
+name = "mainnet"
+node_rpc_address = "https://api.hiro.so"
+bitcoin_node_rpc_address = "http://mainnet.stacks.co:20443"
+stacks_node_rpc_address = "https://api.hiro.so"
+stacks_api_address = "https://api.hiro.so"
+bitcoin_explorer_url = "https://mempool.space"
+stacks_explorer_url = "https://explorer.hiro.so/?chain=mainnet"

@@ -1,0 +1,41 @@
+{
+  "name": "defi-credit-score-backend",
+  "version": "1.0.0",
+  "description": "Backend API for DeFi Credit Score System",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "tsc",
+    "start": "bun dist/index.js",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.9.0",
+    "@stacks/blockchain-api-client": "^7.0.0",
+    "@stacks/network": "^6.0.0",
+    "@stacks/transactions": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.0",
+    "helmet": "^7.1.0",
+    "pg": "^8.11.0",
+    "ws": "^8.16.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.0",
+    "@types/pg": "^8.11.0",
+    "@types/ws": "^8.5.10",
+    "bun-types": "latest",
+    "prisma": "^5.9.0",
+    "typescript": "^5.3.0"
+  }
+}

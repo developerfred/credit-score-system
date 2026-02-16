@@ -1,0 +1,21 @@
+{
+  "name": "DeFi Credit Score System Tests",
+  "tests": [
+    {
+      "name": "Credit Score Contract Tests",
+      "path": "contracts/tests/credit-score_test.ts"
+    },
+    {
+      "name": "Loan Manager Tests",
+      "path": "contracts/tests/loan-manager_test.ts"
+    },
+    {
+      "name": "Agent Registry Tests",
+      "path": "contracts/tests/agent-registry_test.ts"
+    },
+    {
+      "name": "Transaction History Tests",
+      "path": "contracts/tests/transaction-history_test.ts"
+    }
+  ]
+}
